@@ -1,86 +1,55 @@
-import React, { useState, useReducer } from "react";
+import React, {  useReducer } from "react";
 
 
 function App() {
 
-  const [count, setCount] = useState(10);
-  const [list, setList] = useState(["joy", "011151242"]);
-  const [name, setName] = useState("");
-
-  // const [state, dispatch] = useReducer(
-  //   (state, action) => {
-  //     switch (action.type) {
-  //       case "SET_ADDRESS":
-  //         return {
-  //           ...state,
-  //           address: action.payload,
-  //         };
-  //       case "ADD_ADDRESS":
-  //         return {
-  //           ...state,
-  //           addresses: [...state.addresses, action.payload],
-  //           address: ""
-  //         }
-
-  //       default:
-  //         return state;
-
-  //     }
-  //   },
-
-  //   {
-  //     addresses: [],
-  //     address: ""
-  //   })
 
 
-  const addOne = () => {
-    setCount(count + 1)
-  }
+  const [state, dispatch] = useReducer(
+    (state, action) => {
+      switch (action.type) {
+        case "SET_ADDRESS":
+          return {
+            ...state,
+            address: action.payload,
+          };
+        case "ADD_ADDRESS":
+          return {
+            ...state,
+            addresses: [...state.addresses, action.payload],
+            address: ""
+          }
 
-  const addList = (e) => {
+        default:
+          return state;
 
-    setList((prevlist) => ([...prevlist, name]))
-    setName("")
+      }
+    },
 
-  }
+    {
+      addresses: [],
+      address: ""
+    })
+
+
+
 
   return (
 
     <div className="App">
 
-      <button onClick={addOne}>Count = {count}</button>
 
-      <ul>
+      <div>
 
-        {list.map((name) => (
+        {state.addresses.map((point, index) => (
 
-          <li key={name}>{name}</li>
+
+
+          <div key={index}>{point}</div>
+
 
         ))}
 
-      </ul>
-
-      <input
-        onChange={(e) => setName(e.target.value)}
-        value={name}
-
-      ></input>
-
-      <button onClick={addList}></button>
-
-
-      {/* <div>
-         
-         {state.addresses.map((point,index) => (
-
-        
-
-          <div key={index}>{point}</div>
-          
-
-         ))}
-      
       </div>
 
       <input
@@ -96,8 +65,8 @@ function App() {
 
       <button onClick={() => dispatch({ type: "ADD_ADDRESS", payload: state.address })}> ADD </button>
 
-      
- */}
+
+
 
 
 

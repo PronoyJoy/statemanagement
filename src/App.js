@@ -1,125 +1,43 @@
-import React, { useReducer } from "react";
+import { useState, useMemo, useCallback } from "react";
 
+function SortedList({ list, sortFunc }) {
+  console.log("SortedList render");
 
+  const sortedList = useMemo(() => {
+    console.log("Running sort");
+    return [...list].sort(sortFunc);
+  }, [list, sortFunc]);
 
-function List() {
-  const [state, dispatch] = useReducer(
-    (state, action) => {
-
-      return{ ...state,
-        ...action}
-   
-  }, {
-    first: "",
-    last: ""
-  })
-
-  return (
-    <div>
-
-      <input
-        type="text"
-        value={state.first}
-        onChange={(e) => {
-          const first = e.target.value;
-          dispatch({ first: first });
-        }}
-      />
-       <input
-        type="text"
-        value={state.last}
-        onChange={(e) => {
-          const last = e.target.value;
-          dispatch({ last: last});
-        }}
-      />
-      <div>First : {state.first} , last:{state.last}</div>
-
-    </div>
-
-  )
-
-
-
+  return <div>{sortedList.join(", ")}</div>;
 }
 
 function App() {
+  const [numbers] = useState([10, 20, 30]);
 
-  const [state, dispatch] = useReducer(
-    (state, action) => {
-      switch (action.type) {
-        case "SET_ADDRESS":
-          return {
-            ...state,
-            address: action.payload,
-          };
-        case "ADD_ADDRESS":
-          return {
-            ...state,
-            addresses: [...state.addresses, action.payload],
-            address: ""
-          }
+  const total = useMemo(
+    () => numbers.reduce((acc, number) => acc + number, 0),
+    [numbers]
+  );
 
-        default:
-          return state;
+  const [names] = useState(["John", "Paul", "George", "Ringo"]);
 
-      }
-    },
+  const [count1, setCount1] = useState(0);
+  const [count2, setCount2] = useState(0);
 
-    {
-      addresses: [],
-      address: ""
-    })
+  const countTotal = count1 + count2;
 
-
-
+  const sortFunc = useCallback((a, b) => a.localeCompare(b) * -1, []);
 
   return (
-
-    <div className="App">
-       
-
-       <List/>
-
-       
-
-      <div>
-
-        {state.addresses.map((point, index) => (
-
-
-
-          <div key={index}>{point}</div>
-
-
-        ))}
-
-      </div>
-
-      <input
-        type="text"
-        value={state.address}
-        onChange={(e) => {
-          const newAddress = e.target.value;
-          dispatch({ type: "SET_ADDRESS", payload: newAddress });
-        }}
-      />
-
-      <div>value = {state.address}</div>
-
-      <button onClick={() => dispatch({ type: "ADD_ADDRESS", payload: state.address })}> ADD </button>
-
-
-
-
-
-
-    </div>
+    <>
+      <div>Total: {total}</div>
+      <div>Names: {names.join(", ")}</div>
+      <SortedList list={names} sortFunc={sortFunc} />
+      <button onClick={() => setCount1(count1 + 1)}>Count1: {count1}</button>
+      <button onClick={() => setCount2(count2 + 1)}>Count2: {count2}</button>
+      <div>Total: {countTotal}</div>
+    </>
   );
 }
-
-
-
-
 
 export default App;
